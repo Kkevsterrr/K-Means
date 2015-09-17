@@ -14,7 +14,6 @@ var svg = d3.select("#kmeans svg")
 .style('-moz-user-select', 'none')
 .style('-ms-user-select', 'none')
 .style('user-select', 'none')
-
 .on('click', function() {
     d3.event.preventDefault();
     if (!manualPlacement || placingFinished) {
@@ -92,7 +91,7 @@ function init() {
         }
     } else {
         d3.select("#kmeans svg").on("click", function() {
-            if (placed < K) {
+            if (placed < K && manualPlacement) {
                 coords = d3.mouse(this);
                 groups.push(place(placed, K, coords[0], coords[1]));
                 draw();
