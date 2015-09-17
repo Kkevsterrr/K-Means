@@ -35,7 +35,7 @@ var centerg = svg.append('g');
 d3
 d3.select("#step")
 .on('click', function() { 
-        step(); draw(); 
+    step(); draw(); 
 });
 d3.select("#restart")
 .on('click', function() { restart(); draw(); });
@@ -85,7 +85,7 @@ function init() {
     var N = parseInt(d3.select('#N')[0][0].value, 10);
     var K = parseInt(d3.select('#K')[0][0].value, 10);
     groups = [];
-    
+
     if (!manualPlacement) {
         for (var i = 0; i < K; i++) {
             groups.push(place(i, K, Math.random() * WIDTH, Math.random() * HEIGHT));
@@ -124,23 +124,27 @@ function init() {
 }
 
 function restart() {
+
     flag = false;
     d3.select("#restart").attr("disabled", "disabled");
+    if (!manualPlacement) {
+        groups.forEach(function(g) {
+            g.dots = [];
+            g.center.x = g.init.center.x;
+            g.center.y = g.init.center.y;
+        });
 
-    groups.forEach(function(g) {
-        g.dots = [];
-        g.center.x = g.init.center.x;
-        g.center.y = g.init.center.y;
-    });
-
-    for (var i = 0; i < dots.length; i++) {
-        var dot = dots[i];
-        dots[i] = {
-            x: dot.init.x,
-            y: dot.init.y,
-            group: undefined,
-            init: dot.init
-        };
+        for (var i = 0; i < dots.length; i++) {
+            var dot = dots[i];
+            dots[i] = {
+                x: dot.init.x,
+                y: dot.init.y,
+                group: undefined,
+                init: dot.init
+            };
+        }
+    } else {
+        init();
     }
 }
 
