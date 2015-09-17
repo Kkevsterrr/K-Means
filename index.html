@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en">
 
-<head>
+    <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Visualizing K-Means algorithm with D3.js - TECH-NI Blog</title>
 	<link rel="stylesheet" href="screen.css" type="text/css" />
@@ -32,7 +34,7 @@
 <div id="kmeans">
 <div><svg></svg></div>
 <div><input type="checkbox" name="manual" onchange="javascript: manual(this);"/>Place Starting Positions Manually</div>
-<div><button id="step">Step</button> <button id="restart" disabled>Restart</button></div>
+<div><button id="step">Step</button> <button id="restart" disabled>Restart</button> <button id="run">Run</button></div>
 <fieldset style="display: inline; margin: .8em 0 1em 0; border: 1px solid #999; padding: .5em">
 <div><label for="N">N (the number of node):</label><input type="number" id="N" min="2" max="1000" value="100"></div>
 <div><label for="K">K (the number of cluster):</label><input type="number" id="K" min="2" max="50" value="5"></div>
@@ -74,6 +76,5 @@
 
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </body>
 </html>

@@ -36,16 +36,25 @@ d3.select("#step")
 .on('click', function() { 
     step(); draw(); 
 });
+d3.select("#run").
+on('click', function() { startRun(); });
 d3.select("#restart")
 .on('click', function() { restart(); draw(); });
 d3.select("#reset")
 .on('click', function() { init(); draw(); });
-
-
+var groups_old = [];
 var groups = [], dots = [];
+firstRun = true;
+var inter;
+function startRun() {
+    $("#run").prop("disabled", true);
+    $("#step").prop("disabled", true);
+    step();
+    inter = setInterval(step, 750);
+}
 function manual(cb) {
     manualPlacement = (cb.checked);
-    init(); draw();
+    init();
 }
 function step() {
     d3.select("#restart").attr("disabled", null);
@@ -78,6 +87,10 @@ function place(i, K, x1, y1) {
 }
 var placed = 0;
 function init() {
+    $("#step").prop("disabled", manualPlacement);
+    $("#run").prop("disabled", manualPlacement);
+    clearInterval(inter);
+    firstRun = true;
     placed = 0;
     d3.select("#restart").attr("disabled", "disabled");
 
@@ -96,13 +109,15 @@ function init() {
                 groups.push(place(placed, K, coords[0], coords[1]));
                 draw();
                 placed++;
+                if (placed == (K)) {
+                    $("#run").prop("disabled", false);
+                    $("#step").prop("disabled", false);
+                }
             } else {
                 step();
                 draw();
             }
         });
-
-
     }
     dots = [];
     flag = false;
@@ -123,27 +138,26 @@ function init() {
 }
 
 function restart() {
-
+    $("#step").prop("disabled", false);
+    $("#run").prop("disabled", false);
+    clearInterval(inter);
+    firstRun = true;
     flag = false;
     d3.select("#restart").attr("disabled", "disabled");
-    if (!manualPlacement) {
-        groups.forEach(function(g) {
-            g.dots = [];
-            g.center.x = g.init.center.x;
-            g.center.y = g.init.center.y;
-        });
+    groups.forEach(function(g) {
+        g.dots = [];
+        g.center.x = g.init.center.x;
+        g.center.y = g.init.center.y;
+    });
 
-        for (var i = 0; i < dots.length; i++) {
-            var dot = dots[i];
-            dots[i] = {
-                x: dot.init.x,
-                y: dot.init.y,
-                group: undefined,
-                init: dot.init
-            };
-        }
-    } else {
-        init();
+    for (var i = 0; i < dots.length; i++) {
+        var dot = dots[i];
+        dots[i] = {
+            x: dot.init.x,
+            y: dot.init.y,
+            group: undefined,
+            init: dot.init
+        };
     }
 }
 
