@@ -3,6 +3,7 @@ var WIDTH = d3.select("#kmeans")[0][0].offsetWidth - 20;
 var HEIGHT = Math.max(300, WIDTH * .7);
 var manualPlacement = false;
 var placingFinished = false;
+var drawCentroids = false;
 var svg = d3.select("#kmeans svg")
 .attr('width', WIDTH)
 .attr('height', HEIGHT)
@@ -51,6 +52,9 @@ function startRun() {
     $("#step").prop("disabled", true);
     step();
     inter = setInterval(step, 750);
+}
+function centroids(cb) {
+    drawCentroids = (cb.checked);
 }
 function manual(cb) {
     manualPlacement = (cb.checked);
@@ -121,20 +125,51 @@ function init() {
     }
     dots = [];
     flag = false;
-    for (i = 0; i < N; i++) {
-        var dot ={
-            x: Math.random() * WIDTH,
-            y: Math.random() * HEIGHT,
-            group: undefined
-        };
-        dot.init = {
-            x: dot.x,
-            y: dot.y,
-            group: dot.group
-        };
-        dots.push(dot);
-    }
+    dots = drawCentroids ? pushCentroids(N, K) : pushRands(N) 
     draw();
+}
+function pushRands(N) {
+    dots = []
+    for (i = 0; i < N; i++) {
+            var dot = {
+                x: Math.random() * WIDTH,
+                y: Math.random() * HEIGHT,
+                group: undefined
+            };
+            dot.init = {
+                x: dot.x,
+                y: dot.y,
+                group: dot.group
+            };
+            dots.push(dot);
+        }
+    return dots;
+}
+
+function pushCentroids(N, K) {
+    dots = [];
+    for (i = 0; i < K; i++) {
+        var cX = Math.random() * WIDTH;
+        var cY = Math.random() * HEIGHT;
+        for (j = 0; j < N/K; j++) {
+                rX = Math.random() * 75;
+                x = cX + ((cX + rX < WIDTH) ? rX : -1 * rX);
+                rY = Math.random() * 75;
+                y = cY + ((cY + rY < WIDTH) ? rY : -1 * rY);
+            var dot = {
+                x: x,/*(Math.random() * WIDTH/K) + cX,*/
+                y: y, /*(Math.random() * HEIGHT/K) + cY,*/
+                group: undefined
+            };
+            dot.init = {
+                x: dot.x,
+                y: dot.y,
+                group: dot.group
+            };
+            dots.push(dot);
+        }
+    }
+    return dots;
 }
 
 function restart() {
