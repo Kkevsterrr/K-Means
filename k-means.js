@@ -151,11 +151,13 @@ function pushCentroids(N, K) {
     for (i = 0; i < K; i++) {
         var cX = Math.random() * WIDTH;
         var cY = Math.random() * HEIGHT;
+        var cW = getRandomArbitrary(50,125);
+        var cH = getRandomArbitrary(50,125);
         for (j = 0; j < N/K; j++) {
-                rX = Math.random() * 75;
+                rX = Math.random() * cW;
                 x = cX + ((cX + rX < WIDTH) ? rX : -1 * rX);
-                rY = Math.random() * 75;
-                y = cY + ((cY + rY < WIDTH) ? rY : -1 * rY);
+                rY = Math.random() * cH;
+                y = cY + ((cY + rY < HEIGHT) ? rY : -1 * rY);
             var dot = {
                 x: x,/*(Math.random() * WIDTH/K) + cX,*/
                 y: y, /*(Math.random() * HEIGHT/K) + cY,*/
@@ -171,7 +173,10 @@ function pushCentroids(N, K) {
     }
     return dots;
 }
-
+/* from Mozilla Developer Center */
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 function restart() {
     $("#step").prop("disabled", false);
     $("#run").prop("disabled", false);
